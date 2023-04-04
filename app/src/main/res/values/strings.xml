@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">GitUser</string>
+    <string name="title_activity_user_list_screen">UserListScreen</string>
+</resources>
