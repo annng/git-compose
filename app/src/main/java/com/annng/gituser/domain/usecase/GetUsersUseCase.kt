@@ -12,10 +12,27 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class GetUsersUseCase @Inject constructor(val gitRepository: GitRepository) {
-    operator fun invoke(): Flow<Resource<List<User>>> = flow {
+    fun loadUserList() : Flow<Resource<List<User>>> = flow {
         try {
             emit(Resource.Loading())
             val books = gitRepository.getUsers()
+            emit(Resource.Success(books))
+        } catch (http: HttpException) {
+            emit(
+                Resource.Error(
+                    http.localizedMessage ?: " Something went wrong please try again later!"
+                )
+            )
+        } catch (io: IOException) {
+            emit(Resource.Error("Please check your internet connecion and try again later."))
+        }
+
+    }.flowOn(Dispatchers.IO)
+
+    fun loadUserDetail(username : String) : Flow<Resource<User>> = flow {
+        try {
+            emit(Resource.Loading())
+            val books = gitRepository.getUser(username)
             emit(Resource.Success(books))
         } catch (http: HttpException) {
             emit(

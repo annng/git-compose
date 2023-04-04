@@ -24,13 +24,12 @@ class UserListViewModel @Inject constructor(
     val state: State<UserListState> = _state
 
     init {
-        getBooks()
+        getUsers()
     }
 
-
-    fun getBooks() {
+    fun getUsers() {
         getUserJob?.cancel()
-        getUserJob = getUserUseCase().onEach { result ->
+        getUserJob = getUserUseCase.loadUserList().onEach { result ->
             when (result) {
                 is Resource.Loading -> {
                     _state.value = UserListState(isLoading = true)
