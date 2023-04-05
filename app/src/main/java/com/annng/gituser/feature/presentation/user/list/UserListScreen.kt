@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,11 +17,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.annng.gituser.common.Screen
 import com.annng.gituser.feature.presentation.user.list.component.ItemUser
 import com.annng.gituser.ui.theme.Black
 import com.annng.gituser.ui.theme.Purple200
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserListScreen(
     navController: NavController,
@@ -45,7 +42,9 @@ fun UserListScreen(
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     state.users?.let {
                         items(it) {
-                            ItemUser(user = it)
+                            ItemUser(user = it, onItemClick ={ user ->
+                                navController.navigate(Screen.UserDetail.route + "?username=${user.login}")
+                            })
                         }
                     }
 

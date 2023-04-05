@@ -45,4 +45,22 @@ class GetUsersUseCase @Inject constructor(val gitRepository: GitRepository) {
         }
 
     }.flowOn(Dispatchers.IO)
+
+    fun loadFollowerList(username : String) : Flow<Resource<List<User>>> = flow {
+        try {
+            emit(Resource.Loading())
+            val books = gitRepository.getUserFollowers(username)
+            emit(Resource.Success(books))
+        } catch (http: HttpException) {
+            emit(
+                Resource.Error(
+                    http.localizedMessage ?: " Something went wrong please try again later!"
+                )
+            )
+        } catch (io: IOException) {
+            emit(Resource.Error("Please check your internet connecion and try again later."))
+        }
+
+    }.flowOn(Dispatchers.IO)
+
 }

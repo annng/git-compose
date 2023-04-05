@@ -14,4 +14,8 @@ class GitRepositoryImpl @Inject constructor(private val api : GitApi) : GitRepos
     override suspend fun getUser(username : String): User {
         return api.getUsers(username)
     }
+
+    override suspend fun getUserFollowers(username : String): List<User> {
+        return api.getUsersFollowers(username)
+    }
 }

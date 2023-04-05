@@ -1,51 +1,66 @@
 package com.annng.gituser.feature.presentation.user.detail
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.TopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.annng.gituser.ui.theme.Purple200
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil.CoilImage
+import androidx.navigation.NavController
+import com.annng.gituser.feature.presentation.user.detail.component.ImageParallax
+import com.annng.gituser.feature.presentation.user.detail.component.ItemFollower
+import com.annng.gituser.ui.widget.AppBar
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.SizeMode
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserDetailScreen(
+    navController : NavController,
+    username : String,
     viewModel: UserDetailViewModel = hiltViewModel()
 ) {
 
     val state = viewModel.state.value
+    val stateFollower = viewModel.followerState.value
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(key1 = username, block = {
+        viewModel.getDetailUser(username)
+        viewModel.getFollowerUser(username)
+    })
 
     Scaffold(
-        topBar =  { TopAppBar(title = { Text(text = state.users?.login ?: "")}, backgroundColor = Purple200)}
-    ) { paddingValues ->
+        topBar =  { AppBar(title = "Detail User", navController = navController)}
+    ) { _ ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(16.dp)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            CoilImage(
-                imageModel = { state.users?.avatar_url },
-                modifier = Modifier
-                    .height(126.dp)
-                    .width(76.dp),// loading a network image or local resource using an URL.
-                imageOptions = ImageOptions(
-                    contentScale = ContentScale.Crop,
-                    alignment = Alignment.Center
-                ),
-                failure = {
-                    Log.e("error", it.reason.toString())
+//            ImageParallax(urlImage = state.user?.html_url ?: "-")
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = state.user?.html_url ?: "-")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Column {
+                val itemSize: Dp = LocalConfiguration.current.screenWidthDp.dp / 3
+                Text(text = "Followers", style = MaterialTheme.typography.h2)
+                com.google.accompanist.flowlayout.FlowRow(mainAxisSize = SizeMode.Expand, mainAxisAlignment = FlowMainAxisAlignment.SpaceEvenly) {
+                    stateFollower.users?.forEachIndexed { index, user ->
+                        ItemFollower(user, itemSize)
+                    }
                 }
-            )
-            Text(text = state.users?.html_url ?: "-")
+            }
+
         }
     }
 }

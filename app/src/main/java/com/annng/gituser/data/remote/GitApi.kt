@@ -13,4 +13,9 @@ interface GitApi {
     suspend fun getUsers(
         @Path("username") username : String
     ): User
+
+    @GET("users/{username}/followers")
+    suspend fun getUsersFollowers(
+        @Path("username") username : String
+    ): List<User>
 }
