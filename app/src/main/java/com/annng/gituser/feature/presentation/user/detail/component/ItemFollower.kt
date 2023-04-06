@@ -2,6 +2,7 @@ package com.annng.gituser.feature.presentation.user.detail.component
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -19,31 +20,38 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun ItemFollower(user : User, size : Dp) {
-    Card {
-        Column(modifier = Modifier
-            .padding(8.dp)
-            .width(size)) {
-            CoilImage(
-                imageModel = { user.avatar_url },
+fun ItemFollower(user : User, onClickable : (User) -> Unit) {
+    Box (modifier = Modifier.padding(16.dp)){
+        Card(modifier = Modifier.clickable { onClickable(user) }) {
+            Column(
                 modifier = Modifier
-                    .height(126.dp)
-                    .fillMaxWidth(),// loading a network image or local resource using an URL.
-                imageOptions = ImageOptions(
-                    contentScale = ContentScale.Crop,
-                    alignment = Alignment.Center
-                ),
-                failure = {
-                    Image(
-                        painterResource(id = R.mipmap.ic_launcher),
-                        contentDescription = "icon launcher",
+                    .padding(8.dp).fillMaxWidth()
+            ) {
+                CoilImage(
+                    imageModel = { user.avatar_url },
+                    modifier = Modifier
+                        .height(126.dp)
+                        .fillMaxWidth(),// loading a network image or local resource using an URL.
+                    imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = user.login, style = MaterialTheme.typography.h2)
+                        alignment = Alignment.Center
+                    ),
+                    failure = {
+                        CoilImage(
+                            imageModel = { R.mipmap.ic_launcher },
+                            imageOptions = ImageOptions(
+                                contentScale = ContentScale.Crop,
+                                alignment = Alignment.Center
+                            ),
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = user.login, style = MaterialTheme.typography.h2)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = user.url, style = MaterialTheme.typography.body1)
+            }
         }
     }
 }

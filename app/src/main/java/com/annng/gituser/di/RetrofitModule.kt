@@ -54,7 +54,7 @@ object RetrofitModule {
     fun getInterceptor(context: Context): Interceptor {
         return Interceptor { chain: Interceptor.Chain ->
             val request: Request = chain.request().newBuilder()
-                .header("Authorization", "Bearer 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")
+                .header("Authorization", "Bearer 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")
                 .cacheControl(CacheControl.Builder().noCache().build())
                 .build()
             chain.proceed(request)

@@ -30,7 +30,7 @@ fun UserListScreen(
 
     val state = viewModel.state.value
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Github User") }, backgroundColor = Purple200)}
+        topBar = { com.annng.gituser.ui.widget.AppBar(title = "Github User", navController, isBack = false)}
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {
             Column(

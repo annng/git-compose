@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import com.annng.gituser.ui.theme.Purple200
 
 @Composable
-fun AppBar(title: String, navController: NavController) {
+fun AppBar(title: String, navController: NavController, isBack : Boolean = true) {
 
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
@@ -27,7 +27,7 @@ fun AppBar(title: String, navController: NavController) {
         contentColor = Color.White,
         elevation = 0.7.dp
     ) {
-        Icon(
+        if (isBack)Icon(
             modifier = Modifier
                 .padding(5.dp)
                 .clickable {

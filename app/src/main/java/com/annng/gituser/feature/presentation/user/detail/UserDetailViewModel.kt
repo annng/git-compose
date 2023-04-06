@@ -45,8 +45,8 @@ class UserDetailViewModel @Inject constructor(
     }
 
     fun getFollowerUser(username : String) {
-        getUserJob?.cancel()
-        getUserJob = userUseCase.loadFollowerList(username).onEach { result ->
+        getFollowUser?.cancel()
+        getFollowUser = userUseCase.loadFollowerList(username).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
                     _followeState.value = UserFollowerState(isLoading = true)
